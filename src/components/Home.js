@@ -2,48 +2,67 @@ import React from "react";
 import styled from "styled-components";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
-import { useState, useContext } from "react";
-
-
+import { useState, useContext, useEffect } from "react";
 import LogOffImage from "./../assets/LogOff.svg";
 import PlusSymbol from "./../assets/plus.svg";
 import MinusSymbol from "./../assets/minus.svg";
-
 import UserContext from "../contexts/UserContext";
 
 export default function Home() {
-    const URL = "http://localhost:5000/balance"
-
     const {userInfo, setUserInfo} = useContext(UserContext);
-    const {name, token} = userInfo;
+    const {name, balance, token} = userInfo;
+    const [refresh, setRefresh] = useState(0);
+    const [userEntries, setUserEntries] = useState([]);
+    const navigator = useNavigate();
+
+    useEffect(() => {
+        if (!token) {
+            alert('Session timed out. Please login again.');
+            navigator('/');
+        }
+        setUserEntries(balance);
+    }, [refresh]);
+
+    function balanceRedirect(type) {
+        if (!type || type !== 'cashIn' && type !== 'cashOut') {
+            return alert("Algo de errado aconteceu, e a culpa é do estagiário.");
+        }
+
+        setUserInfo({...userInfo, operation: type});
+        navigator('/balance');
+    }
 
     return (
-        <Balance>
+        <HomeContainer>
             <User>
                 <h1>Olá, {name}</h1>
                 <img src={LogOffImage}></img>
             </User>
 
-            <Entries style={false ? "" : {display: "flex", alignItems: "center", justifyContent: "center", textAlign: "center"}}>
-                {false ? "" : <h2>Não há registros de entrada ou saída</h2>}
+            <Entries style={userEntries.length > 0 ? {} : {display: "flex", alignItems: "center", justifyContent: "center", textAlign: "center"}}>
+                {userEntries.length > 0 ? "" : <h2>Não há registros de entrada ou saída</h2>}
             </Entries>
             
             <NewEntriesContainer>
                 <NewEntry>
-                    <img src={PlusSymbol}></img>
+                    <img src={PlusSymbol} onClick={() => {
+                        balanceRedirect('cashIn');
+                    }} />
                     <h3>Nova<br/> entrada</h3>
                 </NewEntry>
 
                 <NewEntry>
-                    <img src={MinusSymbol}></img>
+                    <img src={MinusSymbol} onClick={() => {
+                        balanceRedirect('cashOut');
+                    }} />
                     <h3>Nova<br/> saída</h3>
                 </NewEntry>
             </NewEntriesContainer>
-        </Balance>
+        </HomeContainer>
     )
 }
 
-const Balance = styled.main`
+const HomeContainer = styled.main`
 width: 100vw;
 height: 100vh;
 

@@ -5,8 +5,7 @@ import GlobalStyle from "./components/Normalize"
 import Login from "./components/Login"
 import Register from "./components/Register"
 import Home from "./components/Home"
-// import CashIn from "./components/CashIn"
-// import CashOut from "./components/Cashout"
+import Balance from "./components/Balance"
 
 import UserContext from "./contexts/UserContext"
 
@@ -26,8 +25,7 @@ export default function App() {
                     <Route path="/" element={<Login />} />
                     <Route path="/register" element={<Register />} />
                     <Route path="/home" element={<Home />} />
-                    {/* <Route path="/cashin" element={<CashIn />} /> */}
-                    {/* <Route path="/cashout" element={<CashOut />} /> */}
+                    <Route path="/balance" element={<Balance />} />
                 </Routes>
             </BrowserRouter>
         </UserContext.Provider>

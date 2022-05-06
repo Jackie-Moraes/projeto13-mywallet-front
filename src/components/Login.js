@@ -29,14 +29,13 @@ export default function Login() {
         });
 
         promise.catch(e => {
-            alert("Algo deu errado! Tente novamente mais tarde.");
+            alert('Email or password incorrect.');
             setDisabled(false)
         });
 
         promise.then(response => {
-            console.log(response);
-            const {name, token} = response.data
-            setUserInfo({name, token});
+            const {name, token, balance} = response.data
+            setUserInfo({name, balance, token});
             setDisabled(false)
             navigator("/home");
         })
