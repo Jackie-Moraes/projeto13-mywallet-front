@@ -7,23 +7,67 @@ import { useState, useContext, useEffect } from "react";
 import UserContext from "../contexts/UserContext";
 
 export default function Balance() {
+    const URL = "http://localhost:5000/balance"
     
     const {userInfo, setUserInfo} = useContext(UserContext);
-    const {name, balance, token, operation} = userInfo;
+    const {token, operation} = userInfo;
     const [value, setValue] = useState(0);
     const [description, setDescription] = useState("");
     const [disabled, setDisabled] = useState(false);
+    const navigator = useNavigate();
+    let entry = "";
+    
+    const userConfig = {
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    };
+    
+    if (operation === "cashIn") {
+        entry = "entrada"
+    } else {
+        entry = "saída";
+    }
+
+    function blockForValidation(e) {
+        e.preventDefault();
+        setDisabled(true);
+        validateEntry();
+    }
+
+    function validateEntry() {
+        const promise = axios.post(URL, 
+            {
+            value,
+            description,
+            operation
+            }, 
+        userConfig);
+
+        promise.catch(e => {
+            alert('Something went wrong, please try again later.');
+            setDisabled(false)
+        });
+
+        promise.then(response => {
+            console.log(response.data)
+            setUserInfo({...userInfo, balance: response.data});
+            setDisabled(false)
+            alert("New entry created! Redirecting...")
+            navigator("/home");
+        })
+    }
 
     return (
         <BalanceContainer>
             <Entry>
-                <h1>Nova entrada</h1>
+                <h1>Nova {entry}</h1>
             </Entry>
 
-            <form onSubmit="" style={disabled ? {opacity: '0.5'} : {}} disabled={disabled ? "disabled" : ""}>
-                <input required placeholder="Valor" type="number" onChange={e => setValue(e.target.value)}></input>
+            <form onSubmit={blockForValidation} style={disabled ? {opacity: '0.5'} : {}} disabled={disabled ? "disabled" : ""}>
+                <input required placeholder="Valor" type="number" min="1" step="any" onChange={e => setValue(e.target.value)}></input>
                 <input required placeholder="Descrição" type="text" onChange={e => setDescription(e.target.value)}></input>
-                <button type="submit">Salvar entrada</button>
+                <button type="submit">Salvar {entry}</button>
             </form>
         </BalanceContainer>
     )
