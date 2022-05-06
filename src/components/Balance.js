@@ -73,7 +73,7 @@ export default function Balance() {
             </Entry>
 
             <form onSubmit={blockForValidation} style={disabled ? {opacity: '0.5'} : {}} disabled={disabled ? "disabled" : ""}>
-                <input required placeholder="Valor" type="number" min="1" step="any" onChange={e => setValue(e.target.value)}></input>
+                <input required placeholder="Valor" type="number" min="0.01" step="any" onChange={e => setValue(e.target.value)}></input>
                 <input required placeholder="Descrição" type="text" onChange={e => setDescription(e.target.value)}></input>
                 <button type="submit">Salvar {entry}</button>
             </form>

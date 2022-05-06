@@ -72,7 +72,11 @@ export default function Home() {
                     {anyInfo ? userEntries.map((entry, keyid) => {
                         const {date, description, value, operation} = entry;
                         const actualValue = value.replace(".", ",");
-                        totalValue += parseFloat(value);
+                        if (operation === "cashIn") {
+                            totalValue += parseFloat(value);
+                        } else {
+                            totalValue -= parseFloat(value);
+                        }
                         return (
                             <Entry key={keyid}>
                                 <EntryContainer>
@@ -87,10 +91,10 @@ export default function Home() {
                     }) : <h2>Não há registros de entrada ou saída</h2>}
                 </Entries>
                 {anyInfo ? 
-                <Saldo>
+                <Balance>
                     <h4>SALDO</h4>
-                    <h4 style={{color: "#03AC00"}}>{totalValue.toString().replace(".", ",")}</h4>
-                </Saldo> : ""}
+                    <h4 style={totalValue > 0 ? {color: "#03AC00"} : totalValue == 0 ? {color: "#868686"} : {color: "#C70000"}}>{totalValue.toString().replace(".", ",")}{parseFloat(totalValue) % 1 !== 0 ? "" : ",00"}</h4>
+                </Balance> : ""}
 
             </EntriesContainer>
             
@@ -200,7 +204,7 @@ const Value = styled.span`
 margin-left: 60px;
 `
 
-const Saldo = styled.section`
+const Balance = styled.section`
     width: 93%;
     position: absolute;
     bottom: 10px;
