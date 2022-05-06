@@ -54,11 +54,16 @@ export default function Home() {
         navigator('/balance');
     }
 
+    function logOff() {
+        setUserInfo({});
+        navigator('/')
+    }
+
     return (
         <HomeContainer>
             <User>
                 <h1>Olá, {name}</h1>
-                <img src={LogOffImage}></img>
+                <img onClick={logOff} src={LogOffImage}></img>
             </User>
 
             <EntriesContainer>
