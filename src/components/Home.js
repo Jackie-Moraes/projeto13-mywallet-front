@@ -39,7 +39,8 @@ export default function Home() {
         });
 
         promise.then((response) => {
-            setUserInfo({...userInfo, balance: response.data})
+            const correctBalance = response.data.reverse();
+            setUserInfo({...userInfo, balance: correctBalance})
             console.log(response.data);
             setUserEntries(response.data);
         })
@@ -69,13 +70,13 @@ export default function Home() {
             <EntriesContainer>
                 <Entries style={anyInfo ? {} : {display: "flex", alignItems: "center", justifyContent: "center", textAlign: "center"}}>
                     {anyInfo ? userEntries.map((entry, keyid) => {
-                        const {description, value, operation} = entry;
+                        const {date, description, value, operation} = entry;
                         const actualValue = value.replace(".", ",");
                         totalValue += parseFloat(value);
                         return (
                             <Entry key={keyid}>
                                 <EntryContainer>
-                                <Date>10/10</Date>
+                                <Date>{date}</Date>
                                     <EntrySeparator>
                                         <Info>{description}</Info>
                                         <Value style={operation === "cashIn" ? {color: "#03AC00"} : {color: "#C70000"}}>{actualValue}{value % 1 == 0 ? ",00" : ""}</Value>

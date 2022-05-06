@@ -29,6 +29,14 @@ export default function Balance() {
         entry = "saída";
     }
 
+    useEffect(() => {
+        if (!token) {
+            alert('Session timed out. Please login again.');
+            navigator('/');
+        }
+    }, [])
+    
+
     function blockForValidation(e) {
         e.preventDefault();
         setDisabled(true);
