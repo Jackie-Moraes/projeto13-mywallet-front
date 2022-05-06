@@ -4,12 +4,14 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useState, useContext } from "react";
 
+import UserContext from "../contexts/UserContext";
+
 export default function Login() {
-    const URL = "INSIRA URL AQUI"
+    const URL = "http://localhost:5000/sign-in"
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    // const {userInfo, setUserInfo} = useContext(UserContext);
+    const {userInfo, setUserInfo} = useContext(UserContext);
     const [disabled, setDisabled] = useState(false);
 
     const navigator = useNavigate();
@@ -21,7 +23,23 @@ export default function Login() {
     }
 
     function validateLogin() {
+        const promise = axios.post(URL, {
+            email,
+            password
+        });
 
+        promise.catch(e => {
+            alert("Algo deu errado! Tente novamente mais tarde.");
+            setDisabled(false)
+        });
+
+        promise.then(response => {
+            console.log(response);
+            const {name, token} = response.data
+            setUserInfo({name, token});
+            setDisabled(false)
+            navigator("/home");
+        })
     }
 
 
@@ -47,18 +65,22 @@ height: 100vh;
 background: #8C11BE;
 display: flex;
 align-items: center;
+justify-content: center;
 flex-direction: column;
 
 h1 {
     font-family: 'Saira Stencil One', cursive;
-    color: #126BA5;
+    color: #FFFFFF;
     font-size: 32px;
     font-weight: 400;
+    margin-bottom: 35px;
 }
 
 a {
     color: #FFFFFF;
     font-size: 15px;
+    font-weight: bold;
+    text-decoration: none;
 }
 
 form {
@@ -69,27 +91,33 @@ form {
 }
 
 input {
-    margin-bottom: 10px;
+    margin-bottom: 15px;
     width: 326px;
-    height: 60px;
+    height: 58px;
     border: 1px solid #FFFFFF;
     border-radius: 5px;
     padding: 10px;
     background: #FFFFFF;
+    font-size: 20px;
+    
+    :focus {
+        outline:none;
+    }
 }
 
 input::placeholder {
-    color: #000000;
+    color: #808080;
 }
 
 button {
     width: 326px;
-    height: 60px;
+    height: 46px;
     border: none;
     background: #A328D6;
     border-radius: 5px;
     padding: 5px;
-
+    margin-bottom: 35px;
     color: #FFFFFF;
+    font-size: 20px;
 }
 `
