@@ -9,7 +9,7 @@ import MinusSymbol from "./../assets/minus.svg";
 import UserContext from "../contexts/UserContext";
 
 export default function Home() {
-    const URL = "http://localhost:5000/balance";
+    const URL = "https://projeto13-mywallet-back.herokuapp.com/balance";
 
     const {userInfo, setUserInfo} = useContext(UserContext);
     const {name, balance, token} = userInfo;

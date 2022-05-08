@@ -5,7 +5,7 @@ import axios from "axios";
 import { useState, useContext } from "react";
 
 export default function Register() {
-    const URL = "http://localhost:5000/sign-up"
+    const URL = "https://projeto13-mywallet-back.herokuapp.com/sign-up"
 
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");

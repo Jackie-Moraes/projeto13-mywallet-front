@@ -7,7 +7,7 @@ import { useState, useContext, useEffect } from "react";
 import UserContext from "../contexts/UserContext";
 
 export default function Balance() {
-    const URL = "http://localhost:5000/balance"
+    const URL = "https://projeto13-mywallet-back.herokuapp.com/balance"
     
     const {userInfo, setUserInfo} = useContext(UserContext);
     const {token, operation} = userInfo;
